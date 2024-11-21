@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Study Schedule Generator</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Welcome to PrepPal!</h1>
+            <p>I'm your smart study schedule generator, here to help you create an efficient timetable</p>
+        </header>
+
+
+        <div class="buttons">
+            <button class="btn big-btn" onclick="window.location.href='study.html'">Generate Your Study
+                Schedule</button>
+            <button class="btn big-btn" onclick="window.location.href='pomodoro.html'">Pomodoro Timer</button>
+        </div>
+
+        <div class="small-buttons">
+            <!-- <button class="icon-btn" onclick="window.location.href='notif.html'"> -->
+                <!-- <i class="fa fa-bell"></i> -->
+            <!-- </button> --> 
+            <button class="icon-btn" onclick="window.location.href='group.html'">
+                <i class="fa fa-users"></i>
+            </button>
+        </div>
+        <div class="background-overlay"></div>
+    </div>
+</body>
+
+<!-- <script>
+    document.getElementById("courseForm").addEventListener("submit", function (event) {
+    event.preventDefault(); // Prevent form from refreshing the page
+
+    // Get the name and course values from the input fields
+    const name = this.querySelector("input[placeholder='Your name']").value.trim();
+    const course = this.querySelector("input[placeholder='Your course']").value.trim();
+
+    if (name === "" || course === "") {
+        alert("Please fill in both fields.");
+        return;
+    }
+
+    // Store the values in localStorage
+    localStorage.setItem("userName", name);
+    localStorage.setItem("userCourse", course);
+
+    // Confirm the data is saved and clear the form inputs
+    alert("Your name and course have been saved!");
+    this.reset();
+});
+
+</script> -->
+
+</html>

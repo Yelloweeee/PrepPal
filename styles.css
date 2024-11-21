@@ -1,0 +1,191 @@
+/* General reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Body styling */
+body {
+    background: linear-gradient(135deg, #2b2d33, #2b2d33);
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+
+    background: url('https://i.pinimg.com/736x/ad/f4/e6/adf4e6e8a28ae4fdbc743c50381e0b78.jpg') no-repeat center center fixed;
+    background-size: cover; /* Ensures the image covers the entire viewport */
+    color: #fff; /* Maintains contrast with the text */
+}
+
+/* Container styling */
+.container {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 2rem;
+    width: 90%;
+    max-width: 600px;
+    text-align: center;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+
+    background: rgba(255, 255, 255, 0.1); /* Semi-transparent overlay for readability */
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 2rem;
+    width: 90%;
+    max-width: 600px;
+    text-align: center;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    background-image: url('https://i.pinimg.com/736x/ad/f4/e6/adf4e6e8a28ae4fdbc743c50381e0b78.jpg'); /* Add your background image */
+    background-size: cover; /* Ensures the image fills the container */
+    background-position: center; /* Centers the image */
+    background-repeat: no-repeat; /* Prevents tiling */
+}
+
+/* Header styling */
+.header h1 {
+    font-size: 2.2rem;
+    font-weight: 600;
+    margin-bottom: 0.8rem;
+    background: linear-gradient(to right, #458290, #437682);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.header p {
+    font-size: 1.1rem;
+    font-weight: 300;
+    margin-bottom: 1.5rem;
+    color: #417681;
+}
+
+/* Input section */
+.input-section form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.input-section input {
+    padding: 12px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 8px;
+    outline: none;
+    background: #fff;
+    color: #333;
+    transition: box-shadow 0.3s ease;
+}
+
+.input-section input:focus {
+    box-shadow: 0 0 10px rgba(59, 102, 172, 0.7);
+}
+
+.submit-btn {
+    padding: 12px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(to right, #3c8fc3, #3b82f6);
+    color: #fff;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.submit-btn:hover {
+    background: linear-gradient(to right, #3b82f6, #60a5fa);
+}
+
+/* Big buttons */
+.buttons {
+    margin: 2rem 0;
+}
+
+.big-btn {
+    display: block;
+    width: 100%;
+    max-width: 300px;
+    margin: 0.5rem auto;
+    padding: 12px;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #fff;
+    background: linear-gradient(to right, #77c2d8, #5ac8ff);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.2s, background 0.3s ease;
+}
+
+.big-btn:hover {
+    transform: translateY(-3px);
+    background: linear-gradient(to right, #5ed3fa, #82bbda);
+}
+
+/* Small buttons */
+.small-buttons {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.icon-btn {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    background: linear-gradient(to right, #6b7280, #9ca3af);
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: transform 0.2s, background 0.3s ease;
+}
+
+.icon-btn:hover {
+    transform: translateY(-3px);
+    background: linear-gradient(to right, #4b5563, #6b7280);
+}
+
+.icon-btn i {
+    color: #fff;
+    font-size: 1.5rem;
+}
+
+/* Responsiveness */
+@media (max-width: 768px) {
+    .header h1 {
+        font-size: 1.8rem;
+    }
+
+    .header p {
+        font-size: 1rem;
+    }
+
+    .big-btn {
+        font-size: 0.9rem;
+        padding: 10px;
+    }
+
+    .icon-btn {
+        width: 50px;
+        height: 50px;
+    }
+}
+.background-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1; /* Ensures it stays behind all content */
+    background: url('https://i.pinimg.com/736x/ad/f4/e6/adf4e6e8a28ae4fdbc743c50381e0b78.jpg') no-repeat center center fixed;
+    background-size: cover;
+    opacity: 0.5; /* Adjust transparency */
+}

@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Study Timetable Scheduler</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-cover bg-center min-h-screen font-['Inter']" style="background-image: url('https://i.pinimg.com/736x/ad/f4/e6/adf4e6e8a28ae4fdbc743c50381e0b78.jpg');">
+    <div class="container mx-auto px-4 py-8 max-w-4xl bg-white bg-opacity-90 rounded-lg shadow-lg">
+        <h1 class="text-3xl font-bold text-center mb-8 text-blue-600">Enhanced Study Timetable Scheduler</h1>
+        
+        <div class="grid md:grid-cols-2 gap-6 mb-8">
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <div class="mb-6">
+                    <label class="block text-black-700 font-semibold mb-2">Total Study Hours</label>
+                    <input type="number" id="studyHours" class="w-full p-2 border rounded-md" min="1">
+                </div>
+
+                <div class="mb-6">
+                    <h2 class="text-xl font-semibold mb-4">Subjects</h2>
+                    <div id="subjectsList" class="space-y-4"></div>
+                    <button onclick="addSubject()" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 mt-4">
+                        <i class="bi bi-plus-circle"></i> Add Subject
+                    </button>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <div class="mb-6">
+                    <h2 class="text-xl font-semibold mb-4">Assignments</h2>
+                    <div id="assignmentsList" class="space-y-4"></div>
+                    <button onclick="addAssignment()" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 mt-4">
+                        <i class="bi bi-plus-circle"></i> Add Assignment
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center">
+            <button onclick="generateTimetable()" class="bg-blue-500 text-white px-8 py-3 rounded-md hover:bg-blue-600 font-semibold">
+                Generate Timetable
+            </button>
+        </div>
+
+        <div id="timetableSection" class="hidden mt-8">
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h2 class="text-2xl font-bold mb-4">Generated Timetable</h2>
+                <div class="mb-6">
+                    <div class="w-full bg-gray-200 rounded-full h-4">
+                        <div id="progressBar" class="bg-green-500 h-4 rounded-full transition-all duration-300" style="width: 0%"></div>
+                    </div>
+                    <p class="text-center mt-2"><span id="progressText">0</span>% Complete</p>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full table-auto">
+                        <thead>
+                            <tr class="bg-gray-100">
+                                <th class="border px-4 py-2">Task</th>
+                                <th class="border px-4 py-2">Date & Time</th>
+                                <th class="border px-4 py-2">Duration (Hours)</th>
+                                <th class="border px-4 py-2">Subgoals</th>
+                                <th class="border px-4 py-2">Complete</th>
+                            </tr>
+                        </thead>
+                        <tbody id="timetableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        if ('Notification' in window) {
+            Notification.requestPermission();
+        }
+
+        function createSubgoalInput() {
+            const subgoalContainer = document.createElement('div');
+            subgoalContainer.className = 'flex gap-2 mb-2';
+            subgoalContainer.innerHTML = `
+                <input type="text" placeholder="Subgoal" class="flex-1 p-2 border rounded-md">
+                <button onclick="removeSubgoal(this)" class="bg-red-500 text-white px-3 rounded-md hover:bg-red-600">
+                    <i class="bi bi-trash"></i>
+                </button>
+            `;
+            return subgoalContainer;
+        }
+
+        function createTaskEntry(type) {
+            const entry = document.createElement('div');
+            entry.className = 'bg-gray-50 p-4 rounded-lg';
+            const now = new Date();
+            now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+            const defaultDateTime = now.toISOString().slice(0, 16);
+            
+            entry.innerHTML = `
+                <div class="space-y-3">
+                    <input type="text" placeholder="${type} Name" class="w-full p-2 border rounded-md">
+                    <div class="grid grid-cols-2 gap-3">
+                        <input type="datetime-local" class="p-2 border rounded-md" value="${defaultDateTime}" min="${defaultDateTime}">
+                        <input type="number" placeholder="Priority (1-5)" class="p-2 border rounded-md" min="1" max="5">
+                    </div>
+                    <div class="subgoals-container space-y-2"></div>
+                    <div class="flex gap-2">
+                        <button onclick="addSubgoalToTask(this)" class="bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600 text-sm">
+                            <i class="bi bi-plus-circle"></i> Add Subgoal
+                        </button>
+                        <button onclick="removeTask(this)" class="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 text-sm">
+                            <i class="bi bi-trash"></i> Remove ${type}
+                        </button>
+                    </div>
+                </div>
+            `;
+            return entry;
+        }
+
+        function addSubject() {
+            const container = document.getElementById('subjectsList');
+            const entry = createTaskEntry('Subject');
+            container.appendChild(entry);
+            addSubgoalToTask(entry.querySelector('button'));
+        }
+
+        function addAssignment() {
+            const container = document.getElementById('assignmentsList');
+            const entry = createTaskEntry('Assignment');
+            container.appendChild(entry);
+            addSubgoalToTask(entry.querySelector('button'));
+        }
+
+        function addSubgoalToTask(button) {
+            const subgoalsContainer = button.parentElement.previousElementSibling;
+            subgoalsContainer.appendChild(createSubgoalInput());
+        }
+
+        function removeSubgoal(button) {
+            button.parentElement.remove();
+        }
+
+        function removeTask(button) {
+            button.closest('.bg-gray-50').remove();
+        }
+
+        function generateTimetable() {
+            const totalHours = parseFloat(document.getElementById('studyHours').value);
+            if (!totalHours || totalHours <= 0) {
+                alert('Please enter valid study hours');
+                return;
+            }
+
+            function extractTaskData(selector) {
+                return Array.from(document.querySelectorAll(selector)).map(entry => ({
+                    name: entry.querySelector('input[type="text"]').value,
+                    datetime: entry.querySelector('input[type="datetime-local"]').value,
+                    priority: parseInt(entry.querySelector('input[type="number"]').value),
+                    subgoals: Array.from(entry.querySelectorAll('.subgoals-container input')).map(sg => sg.value).filter(sg => sg)
+                })).filter(t => t.name && t.priority && t.datetime);
+            }
+
+            const subjects = extractTaskData('#subjectsList > div');
+            const assignments = extractTaskData('#assignmentsList > div');
+
+            if (!subjects.length && !assignments.length) {
+                alert('Please add at least one subject or assignment');
+                return;
+            }
+
+            const allTasks = [...subjects, ...assignments].sort((a, b) => new Date(a.datetime) - new Date(b.datetime));
+            const hoursPerTask = totalHours / allTasks.length;
+
+            const timetableBody = document.getElementById('timetableBody');
+            timetableBody.innerHTML = '';
+
+            allTasks.forEach(task => {
+                const row = document.createElement('tr');
+                const subgoalsHtml = task.subgoals.map(sg => `
+                    <div class="flex items-center gap-2 mb-1">
+                        <input type="checkbox" class="subgoal-checkbox w-4 h-4" onchange="updateProgress()">
+                        <span>${sg}</span>
+                    </div>
+                `).join('');
+
+                row.innerHTML = `
+                    <td class="border px-4 py-2">
+                        <div class="font-semibold">${task.name}</div>
+                        <div class="text-sm text-gray-600">Priority: ${task.priority}</div>
+                    </td>
+                    <td class="border px-4 py-2">${new Date(task.datetime).toLocaleString()}</td>
+                    <td class="border px-4 py-2 text-center">${hoursPerTask.toFixed(1)}</td>
+                    <td class="border px-4 py-2">${subgoalsHtml}</td>
+                    <td class="border px-4 py-2 text-center">
+                        <input type="checkbox" class="task-checkbox w-5 h-5" onchange="updateProgress()">
+                    </td>
+                `;
+                timetableBody.appendChild(row);
+            });
+
+            document.getElementById('timetableSection').classList.remove('hidden');
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const mainTasks = document.querySelectorAll('.task-checkbox');
+            const subgoals = document.querySelectorAll('.subgoal-checkbox');
+            const totalItems = mainTasks.length + subgoals.length;
+            const completedItems = [...mainTasks, ...subgoals].filter(cb => cb.checked).length;
+            const progress = (completedItems / totalItems) * 100;
+
+            document.getElementById('progressBar').style.width = `${progress}%`;
+            document.getElementById('progressText').textContent = Math.round(progress);
+
+            const incompleteTasks = [...mainTasks, ...subgoals].filter(cb => !cb.checked).map(cb => cb.closest('tr').querySelector('td:first-child').innerText.trim());
+            if (incompleteTasks.length) {
+                alert(`Incomplete tasks or subgoals:\n${incompleteTasks.join('\n')}`);
+            }
+        }
+    </script>
+</body>
+</html>
